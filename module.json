@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "compatibility": {
     "minimum": "13",
-    "verified": "14"
+    "verified": "14.368"
   },
   "authors": [
     {
@@ -35,7 +35,9 @@
       {
         "id": "CoC7",
         "type": "system",
-        "compatibility": {}
+        "compatibility": {
+          "verified": "8.15"
+        }
       }
     ]
   },
