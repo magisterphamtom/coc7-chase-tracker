@@ -1,0 +1,223 @@
+<section class="coc7-chase-tracker">
+  <div class="coc7-deco-banner">
+    <span class="coc7-deco-line"></span>
+    <span class="coc7-deco-diamond">&#9670;</span>
+    <span class="coc7-deco-line"></span>
+  </div>
+
+  <div class="coc7-chase-toggles">
+    <div class="coc7-chase-toggle-group">
+      <button type="button" class="coc7-chase-toggle {{#if isFoot}}active{{/if}}" data-action="setModeFoot">
+        <i class="fa-solid fa-person-running"></i> {{localize "COC7CHASE.ModeFoot"}}
+      </button>
+      <button type="button" class="coc7-chase-toggle {{#if isCar}}active{{/if}}" data-action="setModeCar">
+        <i class="fa-solid fa-car-side"></i> {{localize "COC7CHASE.ModeCar"}}
+      </button>
+    </div>
+    <div class="coc7-chase-toggle-group">
+      <button type="button" class="coc7-chase-toggle {{#if is1933}}active{{/if}}" data-action="setEra1933">1933</button>
+      <button type="button" class="coc7-chase-toggle {{#if isModern}}active{{/if}}" data-action="setEraModern">{{localize "COC7CHASE.EraModern"}}</button>
+    </div>
+  </div>
+
+  <div class="coc7-chase-gap-block">
+    <div class="coc7-chase-gap-label">
+      {{localize "COC7CHASE.Gap"}} : <strong>{{gap}}</strong> / {{maxGap}}
+      {{#if caught}}<span class="coc7-chase-gap-flag coc7-chase-flag-caught">{{localize "COC7CHASE.Caught"}}</span>{{/if}}
+      {{#if escaped}}<span class="coc7-chase-gap-flag coc7-chase-flag-escaped">{{localize "COC7CHASE.Escaped"}}</span>{{/if}}
+    </div>
+    <div class="coc7-chase-gap-bar">
+      <div class="coc7-chase-gap-fill" style="width: {{gapPercent}}%;"></div>
+
+      <div class="coc7-chase-marker-group coc7-chase-marker-group-pursuer" style="left: 0%;">
+        <span class="coc7-chase-marker coc7-chase-marker-pursuer">
+          <span class="coc7-chase-marker-inner">
+            {{#if pursuerImg}}
+              <img src="{{pursuerImg}}" alt="{{pursuerName}}" />
+            {{else}}
+              {{#if isFoot}}<i class="fa-solid fa-person-running"></i>{{/if}}
+              {{#if isCar}}<i class="fa-solid fa-car-side"></i>{{/if}}
+            {{/if}}
+          </span>
+        </span>
+        <span class="coc7-chase-marker-caption">{{#if pursuerName}}{{pursuerName}}{{else}}{{localize "COC7CHASE.ColumnPursuers"}}{{/if}}</span>
+      </div>
+
+      <div class="coc7-chase-marker-group coc7-chase-marker-group-quarry" style="left: {{gapPercent}}%;">
+        <span class="coc7-chase-marker coc7-chase-marker-quarry">
+          <span class="coc7-chase-marker-inner">
+            {{#if quarryImg}}
+              <img src="{{quarryImg}}" alt="{{quarryName}}" />
+            {{else}}
+              {{#if isFoot}}<i class="fa-solid fa-person-running"></i>{{/if}}
+              {{#if isCar}}<i class="fa-solid fa-car-side"></i>{{/if}}
+            {{/if}}
+          </span>
+        </span>
+        <span class="coc7-chase-marker-caption">{{#if quarryName}}{{quarryName}}{{else}}{{localize "COC7CHASE.ColumnQuarries"}}{{/if}}</span>
+      </div>
+    </div>
+    <div class="coc7-chase-gap-buttons">
+      <button type="button" class="coc7-chase-gap-btn" data-action="gapMinus">&minus; {{localize "COC7CHASE.GapCloser"}}</button>
+      <button type="button" class="coc7-chase-gap-btn" data-action="gapPlus">+ {{localize "COC7CHASE.GapFurther"}}</button>
+    </div>
+  </div>
+
+  <p class="coc7-chase-drop-hint"><i class="fa-solid fa-hand-pointer"></i> {{localize "COC7CHASE.DropHint"}}</p>
+
+  <datalist id="coc7-chase-skill-list">
+    {{#each skillSuggestions as |s|}}
+      <option value="{{s}}"></option>
+    {{/each}}
+  </datalist>
+
+  <div class="coc7-chase-columns">
+    <div class="coc7-chase-column">
+      <div class="coc7-chase-column-title coc7-chase-column-pursuers">{{localize "COC7CHASE.ColumnPursuers"}}</div>
+      <div class="coc7-chase-column-body" data-role="pursuer">
+        {{#each pursuers as |p|}}
+          <div class="coc7-chase-participant" data-participant-id="{{p.id}}">
+            <div class="coc7-chase-participant-header">
+              {{#if p.img}}
+                <img class="coc7-chase-participant-portrait" src="{{p.img}}" alt="{{p.name}}" />
+              {{else}}
+                <span class="coc7-chase-participant-icon"><i class="fa-solid {{p.icon}}"></i></span>
+              {{/if}}
+              <span class="coc7-chase-participant-name">{{p.name}}</span>
+              {{#if p.move}}<span class="coc7-chase-participant-move">MOV {{p.move}}</span>{{/if}}
+              <button type="button" class="coc7-chase-participant-delete" data-action="deleteParticipant" data-participant-id="{{p.id}}" title="{{localize 'COC7CHASE.Delete'}}">&times;</button>
+            </div>
+            {{#if p.isVehicle}}
+              <div class="coc7-chase-driver-slot">
+                {{#if p.driverName}}
+                  <span class="coc7-chase-driver-info">
+                    {{#if p.driverImg}}
+                      <img class="coc7-chase-driver-portrait" src="{{p.driverImg}}" alt="{{p.driverName}}" />
+                    {{else}}
+                      <i class="fa-solid fa-id-badge"></i>
+                    {{/if}}
+                    {{localize "COC7CHASE.Driver"}} : <strong>{{p.driverName}}</strong>
+                  </span>
+                  <button type="button" class="coc7-chase-driver-remove" data-action="deleteDriver" title="{{localize 'COC7CHASE.RemoveDriver'}}">&times;</button>
+                {{else}}
+                  <span class="coc7-chase-driver-placeholder">{{localize "COC7CHASE.DriverHint"}}</span>
+                {{/if}}
+              </div>
+            {{/if}}
+            <div class="coc7-chase-obstacle-row">
+              <input type="text" class="coc7-chase-obstacle-skill" list="coc7-chase-skill-list" value="Chance" />
+              <select class="coc7-chase-obstacle-severity">
+                <option value="minor">{{localize "COC7CHASE.SeverityMinor"}}</option>
+                <option value="major">{{localize "COC7CHASE.SeverityMajor"}}</option>
+              </select>
+              {{#if p.canRollChance}}
+                <button type="button" class="coc7-chase-obstacle-btn coc7-chase-obstacle-chance" data-action="rollChance" title="{{localize 'COC7CHASE.ChanceRoll'}}">🍀</button>
+              {{/if}}
+              <button type="button" class="coc7-chase-obstacle-btn coc7-chase-obstacle-success" data-action="obstacleSuccess">{{localize "COC7CHASE.Success"}}</button>
+              <button type="button" class="coc7-chase-obstacle-btn coc7-chase-obstacle-failure" data-action="obstacleFailure">{{localize "COC7CHASE.Failure"}}</button>
+            </div>
+          </div>
+        {{else}}
+          <p class="coc7-chase-empty">{{localize "COC7CHASE.NoParticipants"}}</p>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="coc7-chase-column">
+      <div class="coc7-chase-column-title coc7-chase-column-quarries">{{localize "COC7CHASE.ColumnQuarries"}}</div>
+      <div class="coc7-chase-column-body" data-role="quarry">
+        {{#each quarries as |p|}}
+          <div class="coc7-chase-participant" data-participant-id="{{p.id}}">
+            <div class="coc7-chase-participant-header">
+              {{#if p.img}}
+                <img class="coc7-chase-participant-portrait" src="{{p.img}}" alt="{{p.name}}" />
+              {{else}}
+                <span class="coc7-chase-participant-icon"><i class="fa-solid {{p.icon}}"></i></span>
+              {{/if}}
+              <span class="coc7-chase-participant-name">{{p.name}}</span>
+              {{#if p.move}}<span class="coc7-chase-participant-move">MOV {{p.move}}</span>{{/if}}
+              <button type="button" class="coc7-chase-participant-delete" data-action="deleteParticipant" data-participant-id="{{p.id}}" title="{{localize 'COC7CHASE.Delete'}}">&times;</button>
+            </div>
+            {{#if p.isVehicle}}
+              <div class="coc7-chase-driver-slot">
+                {{#if p.driverName}}
+                  <span class="coc7-chase-driver-info">
+                    {{#if p.driverImg}}
+                      <img class="coc7-chase-driver-portrait" src="{{p.driverImg}}" alt="{{p.driverName}}" />
+                    {{else}}
+                      <i class="fa-solid fa-id-badge"></i>
+                    {{/if}}
+                    {{localize "COC7CHASE.Driver"}} : <strong>{{p.driverName}}</strong>
+                  </span>
+                  <button type="button" class="coc7-chase-driver-remove" data-action="deleteDriver" title="{{localize 'COC7CHASE.RemoveDriver'}}">&times;</button>
+                {{else}}
+                  <span class="coc7-chase-driver-placeholder">{{localize "COC7CHASE.DriverHint"}}</span>
+                {{/if}}
+              </div>
+            {{/if}}
+            <div class="coc7-chase-obstacle-row">
+              <input type="text" class="coc7-chase-obstacle-skill" list="coc7-chase-skill-list" value="Chance" />
+              <select class="coc7-chase-obstacle-severity">
+                <option value="minor">{{localize "COC7CHASE.SeverityMinor"}}</option>
+                <option value="major">{{localize "COC7CHASE.SeverityMajor"}}</option>
+              </select>
+              {{#if p.canRollChance}}
+                <button type="button" class="coc7-chase-obstacle-btn coc7-chase-obstacle-chance" data-action="rollChance" title="{{localize 'COC7CHASE.ChanceRoll'}}">🍀</button>
+              {{/if}}
+              <button type="button" class="coc7-chase-obstacle-btn coc7-chase-obstacle-success" data-action="obstacleSuccess">{{localize "COC7CHASE.Success"}}</button>
+              <button type="button" class="coc7-chase-obstacle-btn coc7-chase-obstacle-failure" data-action="obstacleFailure">{{localize "COC7CHASE.Failure"}}</button>
+            </div>
+          </div>
+        {{else}}
+          <p class="coc7-chase-empty">{{localize "COC7CHASE.NoParticipants"}}</p>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+  <form class="coc7-chase-add-form">
+    <input type="text" class="coc7-chase-input-name" placeholder="{{localize 'COC7CHASE.NamePlaceholder'}}" required />
+    <select class="coc7-chase-input-role">
+      <option value="pursuer">{{localize "COC7CHASE.RolePursuer"}}</option>
+      <option value="quarry">{{localize "COC7CHASE.RoleQuarry"}}</option>
+    </select>
+    <select class="coc7-chase-input-kind">
+      <option value="person">{{localize "COC7CHASE.TypePerson"}}</option>
+      <option value="vehicle">{{localize "COC7CHASE.TypeVehicle"}}</option>
+    </select>
+    <input type="number" class="coc7-chase-input-move" placeholder="MOV" min="0" />
+    <button type="submit" class="coc7-chase-add-btn">+</button>
+  </form>
+
+  <div class="coc7-chase-ideas">
+    <button type="button" class="coc7-chase-ideas-toggle" data-action="toggleIdeas">
+      <i class="fa-solid fa-lightbulb"></i> {{localize "COC7CHASE.IdeasTitle"}}
+    </button>
+    {{#if ideasOpen}}
+      <div class="coc7-chase-ideas-body">
+        <p class="coc7-chase-ideas-hint">{{localize "COC7CHASE.IdeasHint"}}</p>
+        <ul>
+          {{#each ideas as |idea|}}
+            <li>{{idea}}</li>
+          {{/each}}
+        </ul>
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if hasLog}}
+    <div class="coc7-chase-log">
+      <h4 class="coc7-chase-log-title">{{localize "COC7CHASE.Log"}}</h4>
+      <ul>
+        {{#each log as |entry|}}
+          <li>{{entry.text}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+
+  <div class="coc7-chase-footer-buttons">
+    <button type="button" class="coc7-chase-reset" data-action="resetChase">{{localize "COC7CHASE.ResetGap"}}</button>
+    <button type="button" class="coc7-chase-clear" data-action="clearAll">{{localize "COC7CHASE.ClearAll"}}</button>
+  </div>
+</section>

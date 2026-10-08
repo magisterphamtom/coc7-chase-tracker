@@ -1,0 +1,58 @@
+<section class="coc7-chase-gauge">
+  <div class="coc7-deco-banner">
+    <span class="coc7-deco-line"></span>
+    <span class="coc7-deco-diamond">&#9670;</span>
+    <span class="coc7-deco-line"></span>
+  </div>
+
+  <div class="coc7-chase-gauge-mode">
+    {{#if isFoot}}<i class="fa-solid fa-person-running"></i>{{/if}}
+    {{#if isCar}}<i class="fa-solid fa-car-side"></i>{{/if}}
+  </div>
+
+  <div class="coc7-chase-gauge-bar">
+    <div class="coc7-chase-gauge-fill" style="width: {{gapPercent}}%;"></div>
+
+    <div class="coc7-chase-marker-group coc7-chase-marker-group-pursuer" style="left: 0%;">
+      <span class="coc7-chase-marker coc7-chase-marker-pursuer">
+        <span class="coc7-chase-marker-inner">
+          {{#if pursuerImg}}
+            <img src="{{pursuerImg}}" alt="{{pursuerName}}" />
+          {{else}}
+            {{#if isFoot}}<i class="fa-solid fa-person-running"></i>{{/if}}
+            {{#if isCar}}<i class="fa-solid fa-car-side"></i>{{/if}}
+          {{/if}}
+        </span>
+      </span>
+      <span class="coc7-chase-marker-caption">{{#if pursuerName}}{{pursuerName}}{{else}}{{localize "COC7CHASE.ColumnPursuers"}}{{/if}}</span>
+    </div>
+
+    <div class="coc7-chase-marker-group coc7-chase-marker-group-quarry" style="left: {{gapPercent}}%;">
+      <span class="coc7-chase-marker coc7-chase-marker-quarry">
+        <span class="coc7-chase-marker-inner">
+          {{#if quarryImg}}
+            <img src="{{quarryImg}}" alt="{{quarryName}}" />
+          {{else}}
+            {{#if isFoot}}<i class="fa-solid fa-person-running"></i>{{/if}}
+            {{#if isCar}}<i class="fa-solid fa-car-side"></i>{{/if}}
+          {{/if}}
+        </span>
+      </span>
+      <span class="coc7-chase-marker-caption">{{#if quarryName}}{{quarryName}}{{else}}{{localize "COC7CHASE.ColumnQuarries"}}{{/if}}</span>
+    </div>
+  </div>
+
+  <div class="coc7-chase-gauge-status">
+    {{#if caught}}
+      <span class="coc7-chase-gauge-flag coc7-chase-flag-caught">{{localize "COC7CHASE.Caught"}}</span>
+    {{else if escaped}}
+      <span class="coc7-chase-gauge-flag coc7-chase-flag-escaped">{{localize "COC7CHASE.Escaped"}}</span>
+    {{else if gaining}}
+      <span class="coc7-chase-gauge-direction coc7-chase-direction-away"><i class="fa-solid fa-arrow-trend-up"></i> {{localize "COC7CHASE.PullingAway"}}</span>
+    {{else if losing}}
+      <span class="coc7-chase-gauge-direction coc7-chase-direction-closer"><i class="fa-solid fa-arrow-trend-down"></i> {{localize "COC7CHASE.ClosingIn"}}</span>
+    {{else}}
+      <span class="coc7-chase-gauge-direction">{{localize "COC7CHASE.Steady"}}</span>
+    {{/if}}
+  </div>
+</section>
