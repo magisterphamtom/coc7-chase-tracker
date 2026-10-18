@@ -1,3 +1,5 @@
+<p align="center"><img src=".github/banner.png" alt="coc7-chase-tracker" width="100%"></p>
+
 # CoC7 – Suivi de Poursuites
 
 Module compagnon de **CoC7 – Suivi de Chance**, **Santé Mentale** et
